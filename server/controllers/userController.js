@@ -34,3 +34,33 @@ export const register = async (req, res) => {
     });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user)
+      return res.status(400).json({
+        msg: 'Incorrect username or password',
+      });
+
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+
+    if (!isPasswordValid)
+      return res.status(400).json({
+        msg: 'Incorrect username or password',
+      });
+    delete user.password;
+
+    res.status(200).json({
+      msg: 'User logged in correctly',
+      name: user.username,
+      user: user,
+      uid: user._id,
+    });
+  } catch (error) {
+    res.status(400).json({
+      msg: 'The user was not created.',
+    });
+  }
+};
