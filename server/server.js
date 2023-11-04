@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { socket } from './sockets/socket.js';
+import morgan from 'morgan';
 import path from 'path';
 import './database/dbConnection';
 
@@ -19,6 +20,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(morgan('dev'));
 app.use(express.static(publicPath));
 
 // IO = esta es la comunicacion del backend
