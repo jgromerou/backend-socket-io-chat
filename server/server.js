@@ -7,6 +7,8 @@ import { socket } from './sockets/socket.js';
 import path from 'path';
 import './database/dbConnection';
 
+import userRouter from './routes/userRoutes.js';
+
 dotenv.config();
 const app = express();
 const server = createServer(app);
@@ -15,6 +17,7 @@ const publicPath = path.resolve(__dirname, '../public');
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(publicPath));
 
@@ -30,3 +33,5 @@ server.listen(port, (err) => {
 
   console.log(`Server Startes on Port ${port}`);
 });
+
+app.use(`/api/auth`, userRouter);
