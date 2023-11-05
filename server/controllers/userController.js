@@ -70,10 +70,17 @@ export const setAvatar = async (req = request, res = response) => {
   try {
     const userId = req.params.id;
     const avatarImage = req.body.image;
-    const userData = await User.findByIdAndUpdate(userId, {
-      isAvatarImageSet: true,
-      avatarImage,
-    });
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      {
+        isAvatarImageSet: true,
+        avatarImage,
+      },
+      {
+        new: true,
+      }
+    );
+    console.log('userData', userData);
     res.status(200).json({
       isSet: userData.isAvatarImageSet,
       image: userData.avatarImage,
@@ -81,6 +88,22 @@ export const setAvatar = async (req = request, res = response) => {
   } catch (error) {
     res.status(400).json({
       msg: 'The avatar was not setted.',
+    });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+      'email',
+      'username',
+      'avatarImage',
+      '_id',
+    ]);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json({
+      msg: 'The list users was not charged.',
     });
   }
 };
