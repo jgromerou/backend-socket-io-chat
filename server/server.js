@@ -9,6 +9,7 @@ import path from 'path';
 import './database/dbConnection';
 
 import userRouter from './routes/userRoutes.js';
+import messageRouter from './routes/messagesRoute.js';
 
 dotenv.config();
 const app = express();
@@ -37,3 +38,4 @@ server.listen(port, (err) => {
 });
 
 app.use(`/api/auth`, userRouter);
+app.use(`/api/messages`, messageRouter);
