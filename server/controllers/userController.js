@@ -1,3 +1,4 @@
+import { request, response } from 'express';
 import User from '../models/userModel';
 import bcrypt from 'bcrypt';
 
@@ -61,6 +62,25 @@ export const login = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       msg: 'The user was not created.',
+    });
+  }
+};
+
+export const setAvatar = async (req = request, res = response) => {
+  try {
+    const userId = req.params.id;
+    const avatarImage = req.body.image;
+    const userData = await User.findByIdAndUpdate(userId, {
+      isAvatarImageSet: true,
+      avatarImage,
+    });
+    res.status(200).json({
+      isSet: userData.isAvatarImageSet,
+      image: userData.avatarImage,
+    });
+  } catch (error) {
+    res.status(400).json({
+      msg: 'The avatar was not setted.',
     });
   }
 };
